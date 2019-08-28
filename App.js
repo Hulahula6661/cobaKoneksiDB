@@ -3,7 +3,9 @@ import {
   StyleSheet,
   View,
   Text,
-  ActivityIndicator
+  ActivityIndicator,
+  TouchableOpacity,
+  ScrollView
 } from 'react-native';
 
 class App extends Component {
@@ -17,14 +19,19 @@ class App extends Component {
   }
 
   componentDidMount() {
-    return fetch('https://facebook.github.io/react-native/movies.json')
+    return fetch('https://belajarjepang.000webhostapp.com/Mobile/select_modul.php', {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
       .then((response) => response.json())
       .then((responseJson) => {
 
         this.setState({
 
           isLoading: false,
-          dataSource: responseJson.movies,
+          dataSource: responseJson.modul,
 
         })
 
@@ -48,19 +55,21 @@ class App extends Component {
 
     else {
 
-      let movies = this.state.dataSource.map((val, key) => {
+      let modul = this.state.dataSource.map((val, key) => {
         return (
-          <View key={key} style={styles.item}>
-            <Text>{val.title}</Text>
-          </View>
+          <TouchableOpacity key={key} style={styles.item}>
+            <Text style={{ color: '#ffffff' }}>{val.nama_modul}</Text>
+          </TouchableOpacity>
         )
 
       })
 
       return (
-        <View style={styles.main_wrapper}>
-          {movies}
-        </View>
+        <ScrollView style={{flex:1}}>
+          <View style={styles.main_wrapper}>
+            {modul}
+          </View>
+        </ScrollView>
       )
     }
 
@@ -70,14 +79,19 @@ class App extends Component {
 const styles = StyleSheet.create({
   main_wrapper: {
     flex: 1,
+    marginHorizontal: 20,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: 20
   },
   item: {
-    flex: 1,
-    alignSelf: 'stretch',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    width: '100%',
+    padding: 15,
+    marginBottom: 20,
+    borderRadius: 8,
+    backgroundColor: '#2e6fe8'
   }
 });
 
